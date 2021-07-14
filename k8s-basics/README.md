@@ -44,17 +44,17 @@
 
 `kubectl apply -f 08-nginx-deployment-update.yaml`
 
-# 9 Check current image
+# 9. Check current image
 
 `kubectl get pods -o custom-columns=NAME:spec.containers[*].name,IMAGE:spec.containers[*].image`
 
-# Check rollout history
+# 10. Check rollout history
 
 `kubectl rollout history deployment nginx`
 
 `kubectl rollout history deployment nginx --revision 3`
 
-# Rollback to previous revision
+# 11. Rollback to previous revision
 
 `kubectl rollout undo deployment nginx`
 
