@@ -1,0 +1,1 @@
+# Folder contains ArgoCD Application manifests
