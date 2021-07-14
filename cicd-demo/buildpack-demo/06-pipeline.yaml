@@ -74,6 +74,7 @@ spec:
             kubectl rollout restart deployment $1
           else
             kubectl create deployment $1 --image=$2
+            kubectl expose deployment $1 --port=8080
           fi
       - name: args
         value:
