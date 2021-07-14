@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: curl
+  name: curl
+spec:
+  containers:
+  - image: nginx
+    name: curl
+    command: ["sh"]
+    args: ["-c", "while true;do curl -s --connect-timeout 1 nginx;sleep 1;echo '';done"]
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
