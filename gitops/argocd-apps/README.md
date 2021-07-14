@@ -1,1 +1,1 @@
-# Folder contains ArgoCD Application manifests
+# Put ArgoCD Application manifest yamls here!
