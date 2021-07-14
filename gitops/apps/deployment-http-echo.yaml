@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: htto-echo
+  name: htto-echo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: htto-echo
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: htto-echo
+    spec:
+      containers:
+      - image: hashicorp/http-echo:0.2.0
+        name: http-echo
+        command:
+        - /http-echo
+        args:
+        - -listen=:8090
+        - -text="Hello World v1!"
+        resources: {}
