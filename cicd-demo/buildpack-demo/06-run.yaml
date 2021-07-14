@@ -1,0 +1,81 @@
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: buildpacks-app-image 
+spec:
+  type: image
+  params:
+    - name: url
+      value: docker.io/bkurt/demoapp:latest
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: buildpacks-test-pipeline
+spec:
+  workspaces:
+  - name: shared-workspace
+  params:
+  - name: gitUrl
+    description: Git repository url
+  - name: appSourcePath
+    description: This is the path within our samples repo we want to build
+  - name: appBuilderImage
+    description: This is the builder we want the task to use
+  - name: deployImage
+    description: This is the image used for k8s deployment
+  resources:
+  - name: build-image
+    type: image
+  tasks:
+  - name: fetch-repository # This task fetches a repository from github, using the `git-clone` task we installed
+    taskRef:
+      name: git-clone
+    workspaces:
+    - name: output
+      workspace: shared-workspace
+    params:
+    - name: url
+      value: "$(params.gitUrl)"
+    - name: subdirectory
+      value: ""
+    - name: deleteExisting
+      value: "true"
+  - name: buildpacks # This task uses the `buildpacks` task to build the application
+    taskRef:
+      name: buildpacks
+    runAfter:
+    - fetch-repository
+    workspaces:
+    - name: source
+      workspace: shared-workspace
+    params:
+    - name: SOURCE_SUBPATH
+      value: "$(params.appSourcePath)"
+    - name: BUILDER_IMAGE
+      value: "$(params.appBuilderImage)"
+    - name: CACHE
+      value: buildpacks-cache
+    resources:
+      outputs:
+      - name: image
+        resource: build-image
+  - name: deploy-to-cluster
+    taskRef:
+      name: kubernetes-actions
+    runAfter:
+    - buildpacks
+    params:
+      - name: script
+        value: |
+          #!/bin/bash
+          kubectl get deployment $1
+          if [ "$?" == "0" ]; then
+            kubectl rollout restart deployment $1
+          else
+            kubectl create deployment $1 --image=$2
+          fi
+      - name: args
+        value:
+        - demo-app
+        - "$(params.deployImage)"
