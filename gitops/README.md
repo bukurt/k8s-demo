@@ -10,7 +10,7 @@ metadata:
   namespace: argocd
 spec:
   destination:
-    namespace: demo
+    namespace: demo-gitops
     server: 'https://kubernetes.default.svc'
   source:
     path: gitops/argocd-apps
@@ -18,6 +18,8 @@ spec:
     targetRevision: HEAD
   project: default
   syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
     automated:
       prune: true
       selfHeal: false
@@ -46,4 +48,20 @@ spec:
       prune: true
       selfHeal: true
 EOF
+```
+
+# Push Application manifest to repository
+
+```
+git add argocd-apps/http-echo.yaml
+git commit -m "http-echo applicaiton deployment"
+git push
+````
+
+# Update Applicaiton
+````
+vi apps/deployment-http-echo.yaml
+git add apps/deployment-http-echo.yaml
+git commit -m "http-echo application updated!"
+git push
 ```
