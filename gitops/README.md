@@ -58,7 +58,7 @@ git commit -m "http-echo applicaiton deployment"
 git push
 ````
 
-# Update Applicaiton
+# Update Application
 ````
 vi apps/deployment-http-echo.yaml
 git add apps/deployment-http-echo.yaml
