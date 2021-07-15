@@ -3,19 +3,19 @@ kind: Deployment
 metadata:
   creationTimestamp: null
   labels:
-    app: htto-echo
-  name: htto-echo
+    app: http-echo
+  name: http-echo
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: htto-echo
+      app: http-echo
   strategy: {}
   template:
     metadata:
       creationTimestamp: null
       labels:
-        app: htto-echo
+        app: http-echo
     spec:
       containers:
       - image: hashicorp/http-echo:0.2.0

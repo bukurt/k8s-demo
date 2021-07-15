@@ -3,12 +3,12 @@ kind: Service
 metadata:
   creationTimestamp: null
   labels:
-    app: htto-echo
-  name: htto-echo
+    app: http-echo
+  name: http-echo
 spec:
   ports:
   - port: 8090
     protocol: TCP
     targetPort: 8090
   selector:
-    app: htto-echo
+    app: http-echo
